@@ -11,9 +11,13 @@ class ExportCSVAction(object):
     def __init__(self, encoding=None):
         self.encoding = encoding or settings.DEFAULT_CHARSET
 
+    @property
+    def __name__(self):
+        return self.__class__.__name__.lower()
+
     def __call__(self, modeladmin, request, queryset):
         fields = []
-        ld = modeladmin.list_display
+        ld = list(modeladmin.list_display)
         if ld and len(ld) > 0:
             if ld[0] == 'action_checkbox':
                 del ld[0]
