@@ -1,3 +1,4 @@
+from django.utils.encoding import force_unicode
 from django.db.models.fields import FieldDoesNotExist
 
 from csvutils.http import CSVResponse
@@ -48,7 +49,11 @@ def queryset_to_csv(queryset, fields=None, exclude=None, display=True, *args, **
             try:
                 field = model._meta.get_field(field_name)
                 if display:
-                    val = obj._get_FIELD_display(field)
+                    if field.rel:
+                        rel_obj = getattr(obj, field.rel.related_name or field.name)
+                        val = force_unicode(rel_obj)
+                    else:
+                        val = obj._get_FIELD_display(field)
                 else:
                     val = getattr(obj, field.attname)
             except FieldDoesNotExist:
