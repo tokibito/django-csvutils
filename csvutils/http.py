@@ -9,4 +9,4 @@ class CSVResponse(HttpResponse):
             self.set_filename(filename)
 
     def set_filename(self, filename):
-        self._headers['Content-Disposition'] = 'attachment; filename=%s' % filename
+        self['Content-Disposition'] = 'attachment; filename=%s' % filename

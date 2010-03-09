@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.utils.translation import ugettext as _
+from django.template.defaultfilters import slugify
 
 from csvutils.shortcuts import queryset_to_csv
 
@@ -22,6 +23,7 @@ class ExportCSVAction(object):
             if ld[0] == 'action_checkbox':
                 del ld[0]
             fields = ld
-        return queryset_to_csv(queryset, fields)
+        return queryset_to_csv(queryset, fields, encoding=self.encoding,
+                filename='%s.csv' % slugify(modeladmin.model.__name__))
 
 export_csv = ExportCSVAction()
