@@ -1,4 +1,5 @@
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_unicode, smart_str
+from django.template.defaultfilters import capfirst
 from django.db.models.fields import FieldDoesNotExist
 
 from csvutils.http import CSVResponse
@@ -38,8 +39,14 @@ def queryset_to_csv(queryset, fields=None, exclude=None, display=True, *args, **
             else:
                 col = field.verbose_name or field.attname
         except FieldDoesNotExist:
-            method = getattr(model, field_name)
-            col = getattr(method, 'short_description', method.__name__)
+            if field_name == '__unicode__':
+                col = force_unicode(model._meta.verbose_name)
+            elif field_name == '__str__':
+                col = smart_str(model._meta.verbose_name)
+            else:
+                method = getattr(model, field_name)
+                col = getattr(method, 'short_description', method.__name__)
+        col = capfirst(col.replace('_', ' '))
         header.append(col)
     data.append(header)
     # body
