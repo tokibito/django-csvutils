@@ -11,7 +11,7 @@ class UnicodeWriter(object):
         self.encoding = encoding or settings.DEFAULT_CHARSET
 
     def writerow(self, row):
-        self.writer.writerow([force_unicode(s).encode(self.encoding) for s in row])
+        self.writer.writerow(map(lambda s: force_unicode(s).encode(self.encoding), row))
 
     def writerows(self, rows):
         for row in rows:
