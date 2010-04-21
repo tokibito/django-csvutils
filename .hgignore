@@ -1,2 +1,15 @@
 syntax: glob
+*.orig
+*.rej
+*~
+*.bak
+*.marks
+*.o
 *.pyc
+*.swp
+
+syntax: regexp
+.*\#.*\#$
+^django_csvutils.egg-info/
+^build/
+^dist/
