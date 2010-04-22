@@ -8,9 +8,7 @@ from csvutils.utils import UnicodeWriter
 __all__ = ('render_to_csv', 'queryset_to_csv')
 
 def render_to_csv(data, *args, **kwargs):
-    encoding = kwargs.get('encoding', None)
-    if 'encoding' in kwargs:
-        del kwargs['encoding']
+    encoding = kwargs.pop('encoding', None)
     response = CSVResponse(*args, **kwargs)
     writer = UnicodeWriter(response, encoding=encoding)
     writer.writerows(data)
