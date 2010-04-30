@@ -13,7 +13,12 @@ from utils import UnicodeReader
 
 def csv_formset_factory(csvfile, form, formset=None, can_delete=False, update=False, encoding=None):
     """
-    
+    Creates a formset instance that can be used to validate the given CSV file.
+
+    csvfile = request.FILES["uploaded_file"]
+    formset_ins = csv_formset_factory(csvfile, form=MyModelForm)
+    if formset_ins.is_valid():
+        my_model_list = formset_ins.save()    
     """
     if hasattr(form._meta, "model"): # ModelForm
         formset_cls = modelformset_factory(
@@ -47,7 +52,6 @@ def csv_formset_factory(csvfile, form, formset=None, can_delete=False, update=Fa
                 for field_name, value in data_dict.iteritems()
         ]))
         form_count += 1
-    import pdb;pdb.set_trace()
     data['%s-%s' % (form_prefix, TOTAL_FORM_COUNT)] = form_count
     data['%s-%s' % (form_prefix, INITIAL_FORM_COUNT)] = form_count if update else 0
     data['%s-%s' % (form_prefix,  MAX_NUM_FORM_COUNT)] = form_count if update else 0
