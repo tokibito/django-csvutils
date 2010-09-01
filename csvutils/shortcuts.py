@@ -9,8 +9,10 @@ __all__ = ('render_to_csv', 'queryset_to_csv')
 
 def render_to_csv(data, *args, **kwargs):
     encoding = kwargs.pop('encoding', None)
+    dialect = kwargs.pop('dialect', None)
+    errors = kwargs.pop('errors', None)
     response = CSVResponse(*args, **kwargs)
-    writer = UnicodeWriter(response, encoding=encoding)
+    writer = UnicodeWriter(response, dialect=dialect, encoding=encoding, errors=errors)
     writer.writerows(data)
     return response
 
