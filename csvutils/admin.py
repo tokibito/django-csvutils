@@ -9,8 +9,9 @@ __all__ = ('ExportCSVAction', 'export_csv')
 class ExportCSVAction(object):
     short_description = _('Export to CSV')
 
-    def __init__(self, encoding=None):
+    def __init__(self, encoding=None, errors=None):
         self.encoding = encoding or settings.DEFAULT_CHARSET
+        self.errors = errors or 'replace'
 
     @property
     def __name__(self):
@@ -23,7 +24,7 @@ class ExportCSVAction(object):
             if ld[0] == 'action_checkbox':
                 del ld[0]
             fields = ld
-        return queryset_to_csv(queryset, fields, encoding=self.encoding,
+        return queryset_to_csv(queryset, fields, encoding=self.encoding, errors=self.errors,
                 filename='%s.csv' % slugify(modeladmin.model.__name__))
 
 export_csv = ExportCSVAction()
